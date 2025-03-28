@@ -11,21 +11,24 @@ class ViewController: UIViewController {
 
     private var number = 12345
 
-    var arrButtons: [UIButton] = []
-
-    var titles = ["7", "8", "9", "+"]
-
     let label = UILabel()
     let button = UIButton()
-    let stackView = UIStackView()
+
+    private var titles = [["7", "8", "9", "+"], ["4", "5", "6", "-"], ["1", "2", "3", "*"], ["AC", "0", "=", "/"]]
+
+    private var verticalStackView = UIStackView()
+    private var stackView1 = UIStackView()
+    private var stackView2 = UIStackView()
+    private var stackView3 = UIStackView()
+    private var stackView4 = UIStackView()
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        configureUI()
+        setLabel()
+        setUI()
     }
 
-    private func configureUI() {
-        arrButtons = setButton(titles, button)
+    private func setLabel() {
         view.backgroundColor = .black
 
         label.text = "\(number)"
@@ -33,43 +36,96 @@ class ViewController: UIViewController {
         label.textColor = .white
         label.font = UIFont.boldSystemFont(ofSize: 60)
 
-        stackView.axis = .horizontal
-        stackView.backgroundColor = .black
-        stackView.spacing = 10
-        stackView.distribution = .fillEqually
-
-        // arrViews에서 담겨진 [UIButton]을 하나씩 순차적으로 담아주면 되지 않을까?
-        stackView.addArrangedSubview(arrButtons[0])
-        stackView.addArrangedSubview(arrButtons[1])
-        stackView.addArrangedSubview(arrButtons[2])
-        stackView.addArrangedSubview(arrButtons[3])
-
-        [label, stackView].forEach { view.addSubview($0) }
-
-        [label, stackView].forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
+        view.addSubview(label)
+        label.translatesAutoresizingMaskIntoConstraints = false
 
         NSLayoutConstraint.activate([
             label.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30),
             label.topAnchor.constraint(equalTo: view.topAnchor, constant: 200),
-            label.heightAnchor.constraint(equalToConstant: 100),
-
-            stackView.heightAnchor.constraint(equalToConstant: 80),
-            stackView.topAnchor.constraint(equalTo: label.bottomAnchor, constant: 60),
-            stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20)
+            label.heightAnchor.constraint(equalToConstant: 100)
         ])
     }
 
-    // Title자리만 바꿔주고 싶다.
-    func setButton(_ titles : [String], _ button: UIButton) -> [UIButton] {
+    func setUI() {
+        let setButton1 = setButton(titles[0], button)
+        let setButton2 = setButton(titles[1], button)
+        let setButton3 = setButton(titles[2], button)
+        let setButton4 = setButton(titles[3], button)
+
+        stackView1 = makeHorizontalStackView(setButton1)
+        stackView2 = makeHorizontalStackView(setButton2)
+        stackView3 = makeHorizontalStackView(setButton3)
+        stackView4 = makeHorizontalStackView(setButton4)
+
+        let arrStackView = fourStackView()
+        verticalStackView = makeVerticalStackView(arrStackView)
+    }
+
+    // 타이틀이 바뀌어 적용되는 버튼을 만들고 배열로 묶어주는 함수
+    private func setButton(_ titles : [String], _ button: UIButton) -> [UIButton] {
+        var arrButtons: [UIButton] = []
+
         for title in titles {
             let button = UIButton()
             button.setTitle("\(title)", for: .normal)
-            arrButtons.append(button)
             button.titleLabel?.font = .boldSystemFont(ofSize: 30)
             button.backgroundColor = UIColor(red: 58/255, green: 58/255, blue: 58/255, alpha: 1.0)
             button.layer.cornerRadius = 40
+            arrButtons.append(button)
         }
         return arrButtons
+    }
+
+    // 4개의 버튼 배열을 묶어서 1개의 스택뷰로 만들어주는 함수
+    private func makeHorizontalStackView(_ views: [UIButton]) -> UIStackView {
+        let horizontalStackView = UIStackView()
+        horizontalStackView.axis = .horizontal
+        horizontalStackView.backgroundColor = .black
+        horizontalStackView.spacing = 10
+        horizontalStackView.distribution = .fillEqually
+
+        horizontalStackView.addArrangedSubview(views[0])
+        horizontalStackView.addArrangedSubview(views[1])
+        horizontalStackView.addArrangedSubview(views[2])
+        horizontalStackView.addArrangedSubview(views[3])
+
+        view.addSubview(horizontalStackView)
+        horizontalStackView.translatesAutoresizingMaskIntoConstraints = false
+
+        NSLayoutConstraint.activate([
+            horizontalStackView.heightAnchor.constraint(equalToConstant: 80)
+        ])
+
+        return horizontalStackView
+    }
+
+    // 4개의 스택뷰를 묶어서 배열로 리턴하는 함수
+    private func fourStackView() -> [UIStackView] {
+        let arrStackView = [stackView1, stackView2, stackView3, stackView4]
+        return arrStackView
+    }
+
+    // 스택뷰 배열을 받아서 UIStackView로 리턴하는 함수 (여기서 Vertical StackView로 전환)
+    private func makeVerticalStackView(_ stackViews: [UIStackView]) -> UIStackView {
+        verticalStackView.axis = .vertical
+        verticalStackView.backgroundColor = .black
+        verticalStackView.spacing = 10
+        verticalStackView.distribution = .fillEqually
+
+        verticalStackView.addArrangedSubview(stackViews[0])
+        verticalStackView.addArrangedSubview(stackViews[1])
+        verticalStackView.addArrangedSubview(stackViews[2])
+        verticalStackView.addArrangedSubview(stackViews[3])
+
+        view.addSubview(verticalStackView)
+        verticalStackView.translatesAutoresizingMaskIntoConstraints = false
+
+        NSLayoutConstraint.activate([
+            verticalStackView.widthAnchor.constraint(equalToConstant: 350),
+            verticalStackView.topAnchor.constraint(equalTo: label.bottomAnchor, constant: 60),
+            verticalStackView.centerXAnchor.constraint(equalTo: view.centerXAnchor)
+        ])
+
+        return verticalStackView
     }
 }
