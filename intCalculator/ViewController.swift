@@ -11,18 +11,67 @@ class ViewController: UIViewController {
 
     private var number = 12345
 
-    var arrViews: [UIView] = []
-
     let label = UILabel()
-    let button7 = UIButton()
-    let button8 = UIButton()
-    let button9 = UIButton()
-    let plusButton = UIButton()
-    let stackView = UIStackView()
+    var stackView1 = UIStackView()
+    var stackView2 = UIStackView()
+
+    let arr = [
+        ["7", "8", "9", "+"],
+        ["4", "5", "6", "-"],
+        ["1", "2", "3", "*"],
+        ["AC", "0", "=", "/"]
+    ]
 
     override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
+        configureStackView()
+
+    }
+    func configureStackView() {
+        self.stackView1 = makeHorizontalStackView(arr[0])
+        self.stackView2 = makeHorizontalStackView(arr[1])
+        
+        for i in arr {
+            stackView1 =  makeHorizontalStackView(i)
+            break
+        }
+        view.addSubview(stackView1)
+        NSLayoutConstraint.activate([
+            stackView1.topAnchor.constraint(equalTo: label.bottomAnchor, constant: 60),
+            stackView1.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 25)
+        ])
+    }
+
+    func makeHorizontalStackView(_ buttonTitles: [String]) -> UIStackView {
+        let stackView = UIStackView()
+        stackView.axis = .horizontal
+        stackView.backgroundColor = .black
+        stackView.spacing = 10
+        stackView.distribution = .fillEqually
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+
+        NSLayoutConstraint.activate([
+            stackView.heightAnchor.constraint(equalToConstant: 80),
+        ])
+
+        for buttonTitle in buttonTitles {
+            let button = UIButton()
+            button.setTitle(buttonTitle, for: .normal)
+            button.titleLabel?.font = .boldSystemFont(ofSize: 30)
+            button.backgroundColor = UIColor(red: 58/255, green: 58/255, blue: 58/255, alpha: 1.0)
+            button.layer.cornerRadius = 40
+
+            button.translatesAutoresizingMaskIntoConstraints = false
+            NSLayoutConstraint.activate([
+                button.heightAnchor.constraint(equalToConstant: 80),
+                button.widthAnchor.constraint(equalToConstant: 80)
+            ])
+
+            stackView.addArrangedSubview(button)
+        }
+
+        return stackView
     }
 
     private func configureUI() {
@@ -33,59 +82,24 @@ class ViewController: UIViewController {
         label.textColor = .white
         label.font = UIFont.boldSystemFont(ofSize: 60)
 
-        button7.setTitle("7", for: .normal)
-        button7.titleLabel?.font = .boldSystemFont(ofSize: 30)
-        button7.backgroundColor = UIColor(red: 58/255, green: 58/255, blue: 58/255, alpha: 1.0)
-        button7.layer.cornerRadius = 40
+        view.addSubview(label)
 
-        button8.setTitle("8", for: .normal)
-        button8.titleLabel?.font = .boldSystemFont(ofSize: 30)
-        button8.backgroundColor = UIColor(red: 58/255, green: 58/255, blue: 58/255, alpha: 1.0)
-        button8.layer.cornerRadius = 40
-
-        button9.setTitle("9", for: .normal)
-        button9.titleLabel?.font = .boldSystemFont(ofSize: 30)
-        button9.backgroundColor = UIColor(red: 58/255, green: 58/255, blue: 58/255, alpha: 1.0)
-        button9.layer.cornerRadius = 40
-
-        plusButton.setTitle("+", for: .normal)
-        plusButton.titleLabel?.font = .boldSystemFont(ofSize: 30)
-        plusButton.backgroundColor = UIColor(red: 58/255, green: 58/255, blue: 58/255, alpha: 1.0)
-        plusButton.layer.cornerRadius = 40
-
-        stackView.axis = .horizontal
-        stackView.backgroundColor = .black
-        stackView.spacing = 10
-        stackView.distribution = .fillEqually
-
-        stackView.addArrangedSubview(button7)
-        stackView.addArrangedSubview(button8)
-        stackView.addArrangedSubview(button9)
-        stackView.addArrangedSubview(plusButton)
-
-        [label, stackView].forEach { view.addSubview($0) }
-
-        [label, stackView].forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
+        label.translatesAutoresizingMaskIntoConstraints = false
 
         NSLayoutConstraint.activate([
             label.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30),
             label.topAnchor.constraint(equalTo: view.topAnchor, constant: 200),
-            label.heightAnchor.constraint(equalToConstant: 100),
-
-            button7.heightAnchor.constraint(equalToConstant: 80),
-            button7.widthAnchor.constraint(equalToConstant: 80),
-
-            button8.heightAnchor.constraint(equalToConstant: 80),
-            button8.widthAnchor.constraint(equalToConstant: 80),
-
-            button9.heightAnchor.constraint(equalToConstant: 80),
-            button9.widthAnchor.constraint(equalToConstant: 80),
-
-            stackView.heightAnchor.constraint(equalToConstant: 80),
-            stackView.topAnchor.constraint(equalTo: view.topAnchor, constant: 400),
-            stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20)
+            label.heightAnchor.constraint(equalToConstant: 100)
         ])
     }
 }
 
+// 이근나 T 피드백
+// 4개의 열을 만들기
+// 수평으로 쌓이는 스택뷰 - 4개
+// 버튼 1개를 재사용이 가능한 상태로 바꾸기
+// 16개의 버튼을 만들기
+
+// 버튼을 만들어서 스택뷰에 넣는거 자체를 하나로 만들거나 << 얘로 방향을 잡고 시작.
+// 버튼 만들기 / 스택뷰 만들기
+// 버튼에 태그 (있는지 확인만)
