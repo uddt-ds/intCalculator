@@ -10,6 +10,7 @@
       * setTitle의 text는 계속 바뀌어야 함
 
  3. title이 다른 버튼 4개 생성
+    * 여기서 버튼을 생성할 때 text를 확인해서 색상을 바꿔주기
 
  4. title이 다른 버튼 4개를 받아서 StackView로 바꿔주기 (함수 사용)
     [UIButton] -> UIStackView

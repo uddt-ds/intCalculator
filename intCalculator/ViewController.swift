@@ -64,12 +64,19 @@ class ViewController: UIViewController {
     // 타이틀이 바뀌어 적용되는 버튼을 만들고 배열로 묶어주는 함수
     private func setButton(_ titles : [String], _ button: UIButton) -> [UIButton] {
         var arrButtons: [UIButton] = []
+        let operate = ["+", "-", "*", "AC", "=", "/"]
 
         for title in titles {
             let button = UIButton()
-            button.setTitle("\(title)", for: .normal)
+            button.setTitle(title, for: .normal)
+            // 만약에 title이 operate의 요소를 포함하고 있지 않으면
+            if !operate.contains(title) {
+                button.backgroundColor = UIColor(red: 58/255, green: 58/255, blue: 58/255, alpha: 1.0)
+            } else {
+                button.backgroundColor = UIColor.orange
+            }
             button.titleLabel?.font = .boldSystemFont(ofSize: 30)
-            button.backgroundColor = UIColor(red: 58/255, green: 58/255, blue: 58/255, alpha: 1.0)
+
             button.layer.cornerRadius = 40
             arrButtons.append(button)
         }
