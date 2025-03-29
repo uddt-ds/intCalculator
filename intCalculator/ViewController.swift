@@ -9,7 +9,7 @@ import UIKit
 
 class ViewController: UIViewController {
 
-    private var number = 12345
+    var number = "0"
 
     let label = UILabel()
     let button = UIButton()
@@ -47,10 +47,10 @@ class ViewController: UIViewController {
     }
 
     func setUI() {
-        let setButton1 = setButton(titles[0], button)
-        let setButton2 = setButton(titles[1], button)
-        let setButton3 = setButton(titles[2], button)
-        let setButton4 = setButton(titles[3], button)
+        let setButton1 = setButton(titles[0], #selector(buttonTapped), button)
+        let setButton2 = setButton(titles[1], #selector(buttonTapped), button)
+        let setButton3 = setButton(titles[2], #selector(buttonTapped), button)
+        let setButton4 = setButton(titles[3], #selector(buttonTapped), button)
 
         stackView1 = makeHorizontalStackView(setButton1)
         stackView2 = makeHorizontalStackView(setButton2)
@@ -62,12 +62,13 @@ class ViewController: UIViewController {
     }
 
     // 타이틀이 바뀌어 적용되는 버튼을 만들고 배열로 묶어주는 함수
-    private func setButton(_ titles : [String], _ button: UIButton) -> [UIButton] {
+    private func setButton(_ titles : [String], _ action: Selector, _ button: UIButton) -> [UIButton] {
         var arrButtons: [UIButton] = []
         let operate = ["+", "-", "*", "AC", "=", "/"]
 
         for title in titles {
             let button = UIButton()
+            button.addTarget(self, action: action, for: .touchDown)
             button.setTitle(title, for: .normal)
             // 만약에 title이 operate의 요소를 포함하고 있지 않으면
             if !operate.contains(title) {
@@ -134,5 +135,20 @@ class ViewController: UIViewController {
         ])
 
         return verticalStackView
+    }
+
+    @objc
+    private func buttonTapped(_ sender: UIButton) {
+        guard let title = sender.currentTitle else { return }
+        if title == "AC" {
+            number = "0"
+            label.text = "\(number)"
+        } else if title != "=" {
+            number += title
+            if number.first == "0" {
+                number.removeFirst()
+            }
+            label.text = "\(number)"
+        }
     }
 }
