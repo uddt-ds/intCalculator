@@ -22,4 +22,9 @@
  6. horizontalStackView를 4개 받아서 VerticalStackView로 바꿔주기 (함수 사용)
     [StackView] -> StackView
 
+ 7. 연산 시 주의할 점
+    버튼에 따라 동작하는 것이 다름. = 연산을 할 때만 연산 결과가 반영되어야 함
+    연산 결과가 나오면 결과 값만 다시 써야함
+    number를 기준으로 생각해봤을 때, 연산의 결과를 number에 표시하되,
+    연산이 끝나면 해당 연산을 기점으로 number에 값이 업데이트 되어야 함.
  */

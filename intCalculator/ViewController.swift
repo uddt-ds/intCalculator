@@ -140,20 +140,21 @@ class ViewController: UIViewController {
     @objc
     private func buttonTapped(_ sender: UIButton) {
         guard let title = sender.currentTitle else { return }
-        // 여기서 guard문 테스트 필요
-        if title == "AC" {
+        switch title {
+        case "=":
+            if let result = calculate(expression: number) {
+                number = "\(result)"
+                label.text = "\(number)"
+            }
+        case "AC":
             number = "0"
             label.text = "\(number)"
-        } else if title != "=" {
+        default:
             number += title
             if number.first == "0" {
                 number.removeFirst()
             }
             label.text = "\(number)"
-        } else {
-            if let result = calculate(expression: number) {
-                label.text = "\(result)"
-            }
         }
     }
 
