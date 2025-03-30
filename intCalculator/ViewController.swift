@@ -140,6 +140,7 @@ class ViewController: UIViewController {
     @objc
     private func buttonTapped(_ sender: UIButton) {
         guard let title = sender.currentTitle else { return }
+        // 여기서 guard문 테스트 필요
         if title == "AC" {
             number = "0"
             label.text = "\(number)"
@@ -149,6 +150,19 @@ class ViewController: UIViewController {
                 number.removeFirst()
             }
             label.text = "\(number)"
+        } else {
+            if let result = calculate(expression: number) {
+                label.text = "\(result)"
+            }
+        }
+    }
+
+    func calculate(expression: String) -> Int? {
+            let expression = NSExpression(format: expression)
+        if let result = expression.expressionValue(with: nil, context: nil) as? Int {
+            return result
+        } else {
+            return nil
         }
     }
 }
