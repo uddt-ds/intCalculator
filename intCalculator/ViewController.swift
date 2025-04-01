@@ -149,6 +149,38 @@ class ViewController: UIViewController {
         case "AC":
             number = "0"
             label.text = "\(number)"
+        case "+" :
+            if number.last != "+" && number.last != "-" && number.last != "/" && number.last != "*" {
+                number += title
+                label.text = "\(number)"
+            } else {
+                makeAlert("연산자를 2개 이상 사용할 수 없습니다.")
+                label.text = "\(number)"
+            }
+        case "-" :
+            if number.last != "+" && number.last != "-" && number.last != "/" && number.last != "*" {
+                number += title
+                label.text = "\(number)"
+            } else {
+                makeAlert("연산자를 2개 이상 사용할 수 없습니다.")
+                label.text = "\(number)"
+            }
+        case "/" :
+            if number.last != "+" && number.last != "-" && number.last != "/" && number.last != "*" {
+                number += title
+                label.text = "\(number)"
+            } else {
+                makeAlert("연산자를 2개 이상 사용할 수 없습니다.")
+                label.text = "\(number)"
+            }
+        case "*" :
+            if number.last != "+" && number.last != "-" && number.last != "/" && number.last != "*" {
+                number += title
+                label.text = "\(number)"
+            } else {
+                makeAlert("연산자를 2개 이상 사용할 수 없습니다.")
+                label.text = "\(number)"
+            }
         default:
             number += title
             if number.first == "0" {
@@ -158,6 +190,7 @@ class ViewController: UIViewController {
         }
     }
 
+
     func calculate(expression: String) -> Int? {
             let expression = NSExpression(format: expression)
         if let result = expression.expressionValue(with: nil, context: nil) as? Int {
@@ -165,5 +198,12 @@ class ViewController: UIViewController {
         } else {
             return nil
         }
+    }
+
+    func makeAlert(_ message: String) {
+        let alert = UIAlertController(title: "경고", message: message, preferredStyle: .alert)
+        let alertAction = UIAlertAction(title: "확인", style: .default)
+        alert.addAction(alertAction)
+        self.present(alert, animated: true)
     }
 }
