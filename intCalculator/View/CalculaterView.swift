@@ -163,15 +163,16 @@ class CalculaterView: UIView {
         guard let title = sender.currentTitle else { return }
         switch title {
         case "=":
+            guard number.suffix(2) != "/0" && number.suffix(2) != "0/" else {
+                delegate?.showAlert("0으로 나누기 연산을 할 수 없습니다.")
+                return
+            }
             guard number.last != "+" && number.last != "-" && number.last != "/" && number.last != "*" else {
                 delegate?.showAlert("올바르지 않은 연산은 할 수가 없습니다.")
                 return
             }
             guard let result = dataModel.calculate(expression: number) else {
                 return
-            }
-            if number.suffix(2) == "/0" {
-                delegate?.showAlert("0으로 나누기를 할 수 없습니다")
             }
             number = "\(result)"
             label.text = "\(number)"
