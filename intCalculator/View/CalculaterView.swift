@@ -198,7 +198,9 @@ class CalculaterView: UIView {
         case "/" :
             if number.last != "+" && number.last != "-" && number.last != "/" && number.last != "*" {
                 number += title
-                label.text = "\(number)"
+                var tempResult = number
+                tempResult = tempResult.replacingOccurrences(of: "/", with: "÷")
+                label.text = "\(tempResult)"
             } else {
                 delegate?.showAlert("연산자를 2개 이상 사용할 수 없습니다.")
                 label.text = "\(number)"
@@ -216,7 +218,9 @@ class CalculaterView: UIView {
             if number.first == "0" {
                 number.removeFirst()
             }
-            label.text = "\(number)"
+            var tempResult = number
+            tempResult = tempResult.replacingOccurrences(of: "/", with: "÷")
+            label.text = "\(tempResult)"
         }
     }
 }
