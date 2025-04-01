@@ -1,13 +1,21 @@
 //
-//  ViewController.swift
+//  CalculaterView.swift
 //  intCalculator
 //
-//  Created by Lee on 3/26/25.
+//  Created by Lee on 4/1/25.
 //
 
 import UIKit
 
-class ViewController: UIViewController {
+protocol AlertViewDelegate {
+    func showAlert(_ message: String)
+}
+
+class CalculaterView: UIView {
+
+    var delegate: AlertViewDelegate?
+
+    let dataModel = DataModel()
 
     var number = "0"
 
@@ -28,29 +36,34 @@ class ViewController: UIViewController {
 
     private var verticalStackView = UIStackView()
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    override init(frame: CGRect) {
+        super.init(frame: frame)
         setUI()
     }
 
-    private func setLabel() {
-        view.backgroundColor = .black
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+    }
 
-        label.text = "\(number)"
+    private func setLabel() {
+        self.backgroundColor = .black
+
+        label.text = number
         label.textAlignment = .right
         label.textColor = .white
         label.font = UIFont.boldSystemFont(ofSize: 60)
 
-        view.addSubview(label)
+        self.addSubview(label)
         label.translatesAutoresizingMaskIntoConstraints = false
 
         NSLayoutConstraint.activate([
-            label.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30),
-            label.topAnchor.constraint(equalTo: view.topAnchor, constant: 200),
+            label.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -30),
+            label.topAnchor.constraint(equalTo: self.topAnchor, constant: 200),
             label.heightAnchor.constraint(equalToConstant: 100)
         ])
     }
 
+    // Label과 버튼, StackView를 생성하는 함수
     func setUI() {
         setLabel()
 
@@ -77,7 +90,7 @@ class ViewController: UIViewController {
             let button = UIButton()
             button.addTarget(self, action: action, for: .touchDown)
             button.setTitle(title, for: .normal)
-            // 만약에 title이 operate의 요소를 포함하고 있지 않으면
+            // 연산자만 오렌지 컬러로 변경
             if !operate.contains(title) {
                 button.backgroundColor = UIColor(red: 58/255, green: 58/255, blue: 58/255, alpha: 1.0)
             } else {
@@ -104,7 +117,7 @@ class ViewController: UIViewController {
         horizontalStackView.addArrangedSubview(views[2])
         horizontalStackView.addArrangedSubview(views[3])
 
-        view.addSubview(horizontalStackView)
+        self.addSubview(horizontalStackView)
         horizontalStackView.translatesAutoresizingMaskIntoConstraints = false
 
         NSLayoutConstraint.activate([
@@ -132,27 +145,36 @@ class ViewController: UIViewController {
         verticalStackView.addArrangedSubview(stackViews[2])
         verticalStackView.addArrangedSubview(stackViews[3])
 
-        view.addSubview(verticalStackView)
+        self.addSubview(verticalStackView)
         verticalStackView.translatesAutoresizingMaskIntoConstraints = false
 
         NSLayoutConstraint.activate([
             verticalStackView.widthAnchor.constraint(equalToConstant: 350),
             verticalStackView.topAnchor.constraint(equalTo: label.bottomAnchor, constant: 60),
-            verticalStackView.centerXAnchor.constraint(equalTo: view.centerXAnchor)
+            verticalStackView.centerXAnchor.constraint(equalTo: self.centerXAnchor)
         ])
 
         return verticalStackView
     }
 
+    // 버튼 누르고 난 뒤 작동하는 로직
     @objc
     private func buttonTapped(_ sender: UIButton) {
         guard let title = sender.currentTitle else { return }
         switch title {
         case "=":
-            if let result = calculate(expression: number) {
-                number = "\(result)"
-                label.text = "\(number)"
+            guard number.last != "+" && number.last != "-" && number.last != "/" && number.last != "*" else {
+                delegate?.showAlert("올바르지 않은 연산은 할 수가 없습니다.")
+                return
             }
+            guard let result = dataModel.calculate(expression: number) else {
+                return
+            }
+            if number.suffix(2) == "/0" {
+                delegate?.showAlert("0으로 나누기를 할 수 없습니다")
+            }
+            number = "\(result)"
+            label.text = "\(number)"
         case "AC":
             number = "0"
             label.text = "\(number)"
@@ -161,7 +183,7 @@ class ViewController: UIViewController {
                 number += title
                 label.text = "\(number)"
             } else {
-                makeAlert("연산자를 2개 이상 사용할 수 없습니다.")
+                delegate?.showAlert("연산자를 2개 이상 사용할 수 없습니다.")
                 label.text = "\(number)"
             }
         case "-" :
@@ -169,7 +191,7 @@ class ViewController: UIViewController {
                 number += title
                 label.text = "\(number)"
             } else {
-                makeAlert("연산자를 2개 이상 사용할 수 없습니다.")
+                delegate?.showAlert("연산자를 2개 이상 사용할 수 없습니다.")
                 label.text = "\(number)"
             }
         case "/" :
@@ -177,7 +199,7 @@ class ViewController: UIViewController {
                 number += title
                 label.text = "\(number)"
             } else {
-                makeAlert("연산자를 2개 이상 사용할 수 없습니다.")
+                delegate?.showAlert("연산자를 2개 이상 사용할 수 없습니다.")
                 label.text = "\(number)"
             }
         case "*" :
@@ -185,7 +207,7 @@ class ViewController: UIViewController {
                 number += title
                 label.text = "\(number)"
             } else {
-                makeAlert("연산자를 2개 이상 사용할 수 없습니다.")
+                delegate?.showAlert("연산자를 2개 이상 사용할 수 없습니다.")
                 label.text = "\(number)"
             }
         default:
@@ -195,21 +217,5 @@ class ViewController: UIViewController {
             }
             label.text = "\(number)"
         }
-    }
-
-    func calculate(expression: String) -> Int? {
-            let expression = NSExpression(format: expression)
-        if let result = expression.expressionValue(with: nil, context: nil) as? Int {
-            return result
-        } else {
-            return nil
-        }
-    }
-
-    func makeAlert(_ message: String) {
-        let alert = UIAlertController(title: "경고", message: message, preferredStyle: .alert)
-        let alertAction = UIAlertAction(title: "확인", style: .default)
-        alert.addAction(alertAction)
-        self.present(alert, animated: true)
     }
 }
