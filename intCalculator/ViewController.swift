@@ -14,17 +14,22 @@ class ViewController: UIViewController {
     let label = UILabel()
     let button = UIButton()
 
-    private var titles = [["7", "8", "9", "+"], ["4", "5", "6", "-"], ["1", "2", "3", "*"], ["AC", "0", "=", "/"]]
+    private var titles = [
+        ["7", "8", "9", "+"],
+        ["4", "5", "6", "-"],
+        ["1", "2", "3", "*"],
+        ["AC", "0", "=", "/"]
+    ]
 
-    private var verticalStackView = UIStackView()
     private var stackView1 = UIStackView()
     private var stackView2 = UIStackView()
     private var stackView3 = UIStackView()
     private var stackView4 = UIStackView()
 
+    private var verticalStackView = UIStackView()
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        setLabel()
         setUI()
     }
 
@@ -47,6 +52,8 @@ class ViewController: UIViewController {
     }
 
     func setUI() {
+        setLabel()
+
         let setButton1 = setButton(titles[0], #selector(buttonTapped), button)
         let setButton2 = setButton(titles[1], #selector(buttonTapped), button)
         let setButton3 = setButton(titles[2], #selector(buttonTapped), button)
@@ -189,7 +196,6 @@ class ViewController: UIViewController {
             label.text = "\(number)"
         }
     }
-
 
     func calculate(expression: String) -> Int? {
             let expression = NSExpression(format: expression)
