@@ -7,6 +7,7 @@
 
 import UIKit
 
+// 앱 실행할 때 띄워주는 런치뷰
 class SplashViewController: UIViewController {
 
     private lazy var logoImage: UIImageView = {
@@ -24,6 +25,7 @@ class SplashViewController: UIViewController {
     }
 }
 
+// 런치뷰 설정
 extension SplashViewController {
     private func setUI() {
         view.backgroundColor = .black

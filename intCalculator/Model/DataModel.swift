@@ -7,6 +7,7 @@
 
 import Foundation
 
+// 계산해주는 메서드
 class DataModel {
     func calculate(expression: String) -> Int? {
             let expression = NSExpression(format: expression)
