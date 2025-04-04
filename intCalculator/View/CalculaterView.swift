@@ -51,7 +51,7 @@ class CalculaterView: UIView {
         label.text = number
         label.textAlignment = .right
         label.textColor = .white
-        label.font = UIFont.boldSystemFont(ofSize: 60)
+        label.font = .boldSystemFont(ofSize: 60)
 
         self.addSubview(label)
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -94,7 +94,7 @@ class CalculaterView: UIView {
             if !operate.contains(title) {
                 button.backgroundColor = UIColor(red: 58/255, green: 58/255, blue: 58/255, alpha: 1.0)
             } else {
-                button.backgroundColor = UIColor.orange
+                button.backgroundColor = .orange
             }
             button.titleLabel?.font = .boldSystemFont(ofSize: 30)
 
@@ -105,17 +105,17 @@ class CalculaterView: UIView {
     }
 
     // 4개의 버튼 배열을 묶어서 1개의 스택뷰로 만들어주는 함수
-    private func makeHorizontalStackView(_ views: [UIButton]) -> UIStackView {
+    private func makeHorizontalStackView(_ buttons: [UIButton]) -> UIStackView {
         let horizontalStackView = UIStackView()
         horizontalStackView.axis = .horizontal
         horizontalStackView.backgroundColor = .black
         horizontalStackView.spacing = 10
         horizontalStackView.distribution = .fillEqually
 
-        horizontalStackView.addArrangedSubview(views[0])
-        horizontalStackView.addArrangedSubview(views[1])
-        horizontalStackView.addArrangedSubview(views[2])
-        horizontalStackView.addArrangedSubview(views[3])
+        horizontalStackView.addArrangedSubview(buttons[0])
+        horizontalStackView.addArrangedSubview(buttons[1])
+        horizontalStackView.addArrangedSubview(buttons[2])
+        horizontalStackView.addArrangedSubview(buttons[3])
 
         self.addSubview(horizontalStackView)
         horizontalStackView.translatesAutoresizingMaskIntoConstraints = false
